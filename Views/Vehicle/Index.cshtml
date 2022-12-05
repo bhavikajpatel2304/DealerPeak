@@ -1,0 +1,146 @@
+﻿@model X.PagedList.IPagedList<DealerPeak.Models.Vehicle>
+@using X.PagedList.Mvc;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+<link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewData["Title"] = "Vehicle List";
+}
+
+<h1>Vehicle List</h1>
+
+<p>
+    <a asp-action="AddVehicle">Add New Vehicle</a>
+</p>
+@using (Html.BeginForm("Index", "Vehicle", FormMethod.Get))
+{
+    <p>
+        Search by any keyword: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </p><br/>
+    <p>
+        <label>Select Price Range:</label>
+        <label id="price"></label>
+    </p>
+    <div id="slider"></div><br/>
+}
+<table id="vehicleTable" class="table table-light">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                @Html.ActionLink("Vehicle Type", "Index", new { sortOrder = ViewBag.TypeSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Vehicle Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Model", "Index", new { sortOrder = ViewBag.ModelSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Make Year", "Index", new { sortOrder = ViewBag.MakeYearSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.PriceSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("New/Used Vehicle", "Index", new { sortOrder = ViewBag.NewVehicleSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("VIN", "Index", new { sortOrder = ViewBag.VINSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehicleType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehicleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehicleModel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehicleMakeYear)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehiclePrice)
+            </td>
+            <td>
+                    @{
+                        if (@item.NewVehicle == true)
+                        {
+                            <span>New</span>
+                        }
+                        else { 
+                            <span> Used </span>
+                            }
+                        }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vin)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.VehicleId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.VehicleId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.VehicleId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+@section scripts {
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(function () {
+            $("#slider").slider({
+                range: true,
+                min: 10000,
+                max: 100000,
+                values: [25, 300],
+                slide: function(event, ui) {
+                    $("#price").text("$" + ui.values[0] + " - $" + ui.values[1]);
+
+                    var min = ui.values[0];
+                    var max = ui.values[1];
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '/vehicles/search/' + min + "/" + max,
+                        success: function(list) {
+                            console.log(list);
+                            var newRow = '';
+                            for (var i = 0;i<list.length;i++){
+                                newRow += '<tr>';
+                                newRow += '<td>' + list[i].vehicleType + '</td>';
+                                newRow += '<td>' + list[i].vehicleName + '</td>';
+                                newRow += '<td>' + list[i].vehicleModel + '</td>';
+                                newRow += '<td>' + list[i].vehicleMakeYear + '</td>';
+                                newRow += '<td>' + list[i].vehiclePrice + '</td>';
+                                newRow += '<td>' + (list[i].newVehicle ? 'Yes' : 'Used') + '</td>';
+                                newRow += '<td>' + list[i].vin + '</td>';
+                                newRow += '<td><a asp-action="Edit" asp-route-id="'+ list[i].vehicleId +'">Edit</a> |'
+                                        + '<a asp-action="Details" asp-route-id="' + list[i].vehicleId + '">Details</a> |'
+                                        + '<a asp-action="Delete" asp-route-id="' + list[i].vehicleId + '">Delete</a></td>';
+                                newRow += '</tr>';
+                            }
+                            $('#vehicleTable tbody').html(newRow);
+                        }
+                    });
+                }
+            })
+        });
+    </script>
+}

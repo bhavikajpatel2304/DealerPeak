@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewData["Title"] = "Home Page";
+    User userInfo = (User)ViewBag.user;
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome, @userInfo.FirstName!!!</h1>
+</div>

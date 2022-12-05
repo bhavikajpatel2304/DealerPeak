@@ -1,0 +1,49 @@
+/* _content/DealerPeak/Views/Shared/_Layout.cshtml.rz.scp.css */
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand[b-qu3rkf7jis] {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+a[b-qu3rkf7jis] {
+  color: #0077cc;
+}
+
+.btn-primary[b-qu3rkf7jis] {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active[b-qu3rkf7jis], .nav-pills .show > .nav-link[b-qu3rkf7jis] {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.border-top[b-qu3rkf7jis] {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom[b-qu3rkf7jis] {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow[b-qu3rkf7jis] {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy[b-qu3rkf7jis] {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+.footer[b-qu3rkf7jis] {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}

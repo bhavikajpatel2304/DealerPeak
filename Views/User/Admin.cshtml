@@ -1,0 +1,76 @@
+﻿@model X.PagedList.IPagedList<DealerPeak.Models.User>
+@using X.PagedList.Mvc;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+<link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<h1>Admin View</h1>
+@using (Html.BeginForm("Admin", "User", FormMethod.Get))
+{
+    <p>
+        Search by any keyword: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </p>
+}
+<table class="table tabel-light">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                @Html.ActionLink("First Name", "Admin", new { sortOrder = ViewBag.FirstNameSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Last Name", "Admin", new { sortOrder = ViewBag.LastNameSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Contact", "Admin", new { sortOrder = ViewBag.ContactSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Email", "Admin", new { sortOrder = ViewBag.EmailSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Active User", "Admin", new { sortOrder = ViewBag.ActiveUserSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contact)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                    @{
+                        if (item.IsActive == true)
+                        {
+                            <span>Yes</span>
+                        }
+                        else { <span>No</span> }
+                    }
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Admin",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
