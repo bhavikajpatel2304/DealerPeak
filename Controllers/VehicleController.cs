@@ -45,7 +45,7 @@ namespace DealerPeak.Controllers
                                           || Convert.ToString(v.VehicleModel).Contains(searchString)
                                           || Convert.ToString(v.VehicleMakeYear).Contains(searchString)
                                           || Convert.ToString(v.VehicleType).Contains(searchString)
-                                          || Convert.ToString(v.Vin).Contains(searchString)
+                                          || Convert.ToString(v.Vin.Trim()).Contains(searchString)
                                           || (v.NewVehicle == true ? "New" : "Used").Contains(searchString));
             }
 
@@ -111,6 +111,7 @@ namespace DealerPeak.Controllers
             ViewData["action"] = "EditVehicle";
             var vehicle = context.Vehicles.Find(id);
             return View(vehicle);
+
         }
 
         [HttpPost]
