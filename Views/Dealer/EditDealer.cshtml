@@ -8,7 +8,7 @@
 
 <h4>Dealer</h4>
 <hr />
-@Html.AntiForgeryToken()
+@*@Html.AntiForgeryToken()*@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="EditDealer">
@@ -21,7 +21,14 @@
             </div>
             <div class="form-group">
                 <label asp-for="DealerContact" class="control-label"></label>
-                <input asp-for="DealerContact" class="form-control" />
+                 @{
+                    if (Model.PageMode.Trim().ToLower().Contains("add"))
+                    {
+                        <input asp-for="DealerContact" class="form-control" />
+                    } else {
+                        <input asp-for="DealerContact" class="form-control" readonly />
+                    }
+                  }
                 <span asp-validation-for="DealerContact" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -31,22 +38,27 @@
             </div>
             <div class="form-group">
                 @{
-                    if (Convert.ToString(ViewData["action"]) == "Add")
+                    if (Model.PageMode.Trim().ToLower().Contains("add"))
                     {
                         <input type="submit" value="Add" class="btn btn-primary" />
-                    } else {
+                    }
+                    else
+                    {
                         <input type="submit" value="Edit" class="btn btn-primary" />
                     }
                 }
             </div>
+            <input asp-for="PageMode" class="form-control" type="hidden" />
         </form>
     </div>
 </div>
-
-<div> <br/>
+<div>
+    <br />
     <a asp-action="Index">Back to Dealer List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

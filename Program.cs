@@ -1,5 +1,6 @@
 using DealerPeak.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 var connectionString = "Server=DESKTOP-6BP2OJF\\SQLEXPRESS;Database=DealerPeakDB;Integrated Security= SSPI;trustServerCertificate=yes; user id=DESKTOP-6BP2OJF\\bhavi; Trusted_Connection=True; MultipleActiveResultSets=true";
-builder.Services.AddDbContext<DealerPeakDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<DealerPeakDbContext>(options =>
+            {
+                options.UseSqlServer(connectionString);
+                options.EnableSensitiveDataLogging();
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
 
 builder.Services.AddRouting(options =>
 {

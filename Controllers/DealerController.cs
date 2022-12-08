@@ -71,7 +71,7 @@ namespace DealerPeak.Controllers
         public IActionResult AddDealer()
         {
             ViewData["action"] = "Add";
-            return View("EditDealer", new Dealer());
+            return View("EditDealer", new Dealer() { PageMode = "Add Dealer" });
         }
 
         [HttpGet]
@@ -79,6 +79,7 @@ namespace DealerPeak.Controllers
         {
             ViewData["action"] = "Edit";
             var dealer = context.Dealers.Find(id);
+            dealer.PageMode = "Edit Dealer";
             return View(dealer);
         }
 
@@ -86,7 +87,7 @@ namespace DealerPeak.Controllers
         public IActionResult EditDealer(Dealer dealer)
         {
             //check weather contact exists on DB or not
-            if (TempData["okDealerContact"] == null)
+            if (TempData["okDealerContact"] == null && dealer.PageMode.Trim().ToLower().Contains("add"))
             {
                 string msg = Check.DealerContactExists(context, dealer.DealerContact);
                 if (!String.IsNullOrEmpty(msg))
@@ -96,7 +97,7 @@ namespace DealerPeak.Controllers
             }
 
             //check weather email exists on DB or not
-            if (TempData["okDealerEmail"] == null)
+            if (TempData["okDealerEmail"] == null && dealer.PageMode.Trim().ToLower().Contains("add"))
             {
                 string msg = Check.DealerEmailExists(context, dealer.DealerEmail);
                 if (!String.IsNullOrEmpty(msg))
@@ -123,7 +124,6 @@ namespace DealerPeak.Controllers
                 return RedirectToAction("Index", "Dealer");
             }
             else {
-                //return RedirectToAction("EditDealer", "Dealer");
                 return View(dealer);
             }
         }

@@ -85,9 +85,8 @@
                 @Html.DisplayFor(modelItem => item.Vin)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.VehicleId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.VehicleId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.VehicleId">Delete</a>
+                <a class="btn btn-dark" asp-action="EditVehicle" asp-route-id="@item.VehicleId">Edit</a> |
+                <a class="btn btn-dark" asp-action="DeleteVehicle" asp-route-id="@item.VehicleId">Delete</a>
             </td>
         </tr>
 }
@@ -131,9 +130,8 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                                 newRow += '<td>' + list[i].vehiclePrice + '</td>';
                                 newRow += '<td>' + (list[i].newVehicle ? 'Yes' : 'Used') + '</td>';
                                 newRow += '<td>' + list[i].vin + '</td>';
-                                newRow += '<td><a asp-action="Edit" asp-route-id="'+ list[i].vehicleId +'">Edit</a> |'
-                                        + '<a asp-action="Details" asp-route-id="' + list[i].vehicleId + '">Details</a> |'
-                                        + '<a asp-action="Delete" asp-route-id="' + list[i].vehicleId + '">Delete</a></td>';
+                                newRow += '<td><a class="btn btn-dark" href="/vehicle/editvehicle/' + list[i].vehicleId + '">Edit</a> |'
+                                        + '<a class="btn btn-dark" href="/vehicle/deletevehicle/' + list[i].vehicleId + '">Delete</a></td>';
                                 newRow += '</tr>';
                             }
                             $('#vehicleTable tbody').html(newRow);

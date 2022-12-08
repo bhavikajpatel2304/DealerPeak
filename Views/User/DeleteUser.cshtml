@@ -1,0 +1,25 @@
+﻿@model DealerPeak.Models.User
+
+@{
+    ViewData["Title"] = "DeleteUser";
+}
+
+<h1>Delete User</h1>
+<br/>
+<div>
+    <hr />
+    <h3>Are you sure to delete the User Account of <span class="btn-warning">@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</span>?</h3>
+    <br/>
+    <form asp-action="DeleteUser" method="post">
+        <input type="hidden" asp-for="UserId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        @{
+            if (@Model.PageMode.Trim().ToLower().Contains("delete") && @Model.LoginType.Trim().ToLower().Contains("admin"))
+            {
+                <a asp-action="Admin" class="btn btn-info">Back to Admin List</a>
+            } else {
+                <a asp-action="index" class="btn btn-info">Back to User List</a>
+            }
+        }
+    </form>
+</div>

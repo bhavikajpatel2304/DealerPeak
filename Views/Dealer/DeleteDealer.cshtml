@@ -4,17 +4,15 @@
     ViewData["Title"] = "DeleteDealer";
 }
 
-<h1>DeleteDealer</h1>
-
-<h3>Are you sure you want to delete this?</h3>
+<h1>Delete Dealer</h1>
+<br/>
 <div>
-    <h4>Dealer</h4>
     <hr />
-    <h1>Are you sure to delete @Html.DisplayFor(model => model.DealerName)?</h1>
-    
+    <h3>Are you sure to delete <span class="btn-warning">@Html.DisplayFor(model => model.DealerName)</span>?</h3>
+    <br/>
     <form asp-action="DeleteDealer" method="post">
         <input type="hidden" asp-for="DealerId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to Dealer List</a>
+        <a asp-action="Index" class="btn btn-info">Back to Dealer List</a>
     </form>
 </div>

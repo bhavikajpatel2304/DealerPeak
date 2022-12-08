@@ -38,6 +38,7 @@ namespace DealerPeak.Controllers
             ViewBag.CurrentFilter = searchString;
 
             var users = from u in context.Users
+                        where u.LoginType.Trim().ToLower().Contains("user")
                          select u;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -197,15 +198,14 @@ namespace DealerPeak.Controllers
         [HttpGet]
         public IActionResult RegisterUser() {
             ViewData["action"] = "Register User";
-            return View("RegisterUser", new User());
+            return View("RegisterUser", new User() { PageMode = "Add User" });
         }
 
         [HttpPost]
         public IActionResult RegisterUser(User user)
         {
-            
             //check weather contact exists on DB or not
-            if (TempData["okContact"] == null)
+            if (TempData["okContact"] == null && user.PageMode.Trim().ToLower().Contains("register"))
             {
                 string msg = Check.ContactExists(context, user.Contact);
                 if (!String.IsNullOrEmpty(msg))
@@ -215,7 +215,7 @@ namespace DealerPeak.Controllers
             }
 
             //check weather email exists on DB or not
-            if (TempData["okEmail"] == null)
+            if (TempData["okEmail"] == null && user.PageMode.Trim().ToLower().Contains("register"))
             {
                 string msg = Check.EmailExists(context, user.Email);
                 if (!String.IsNullOrEmpty(msg))
@@ -226,15 +226,59 @@ namespace DealerPeak.Controllers
 
             if (ModelState.IsValid)
             {
-                //add user into DB
-                context.Users.Add(user);
-                context.SaveChanges();
-                return RedirectToAction("Login", "User");
+                //new dealer added
+                if (user.UserId == 0)
+                {
+                    //add user into DB
+                    context.Users.Add(user);
+                    context.SaveChanges();
+                    return RedirectToAction("Login", "User");
+                }
+                else
+                {
+                    //Update user into DB
+                    context.Users.Update(user);
+                    user.DateAdded = DateTime.UtcNow;
+                    user.IsActive = true;
+                    context.SaveChanges();
+                    if (user.LoginType.Trim().ToLower().Contains("user"))
+                        return RedirectToAction("Index", "User");
+                    else
+                        return RedirectToAction("Admin", "User");
+                }
             }
-            else
-            {
+            else {
                 return View(user);
             }
         }
+
+        [HttpGet]
+        public IActionResult EditUser(int id)
+        {
+            ViewData["action"] = "Edit User";
+            User user = context.Users.Find(id);
+            user.PageMode = "Edit User";
+            return View("RegisterUser", user);
+        }
+
+        [HttpGet]
+        public IActionResult DeleteUser(int id)
+        {
+            var user = context.Users.Find(id);
+            user.PageMode = "Delete User";
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteUser(User user)
+        {
+            if (user.UserId > 0)
+            {
+                context.Users.Remove(user);
+                context.SaveChanges();
+            }
+            return RedirectToAction("Index", "User");
+        }
+
     }
 }

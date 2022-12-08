@@ -1,0 +1,18 @@
+﻿@model DealerPeak.Models.Vehicle
+
+@{
+    ViewData["Title"] = "DeleteVehicle";
+}
+
+<h1>Delete Vehicle</h1>
+<br/>
+<div>
+    <hr />
+    <h3>Are you sure to delete the Vehicle Information of <span class="btn-warning">@Html.DisplayFor(model => model.VehicleName)</span>?</h3>
+    <br />
+    <form asp-action="DeleteVehicle" method="post">
+        <input type="hidden" asp-for="VehicleId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-info">Back to Vehicle List</a>
+    </form>
+</div>

@@ -102,7 +102,7 @@ namespace DealerPeak.Controllers
         public IActionResult AddVehicle()
         {
             ViewData["action"] = "AddVehicle";
-            return View("EditVehicle", new Vehicle());
+            return View("EditVehicle", new Vehicle() { PageMode = "Add Vehicle" });
         }
 
         [HttpGet]
@@ -110,6 +110,7 @@ namespace DealerPeak.Controllers
         {
             ViewData["action"] = "EditVehicle";
             var vehicle = context.Vehicles.Find(id);
+            vehicle.PageMode = "Edit Vehicle";
             return View(vehicle);
 
         }
@@ -121,13 +122,13 @@ namespace DealerPeak.Controllers
             if (TempData["okVIN"] == null)
             {
                 string msg = Check.VINExists(context, vehicle.Vin.ToString());
-                if (!String.IsNullOrEmpty(msg))
+                if (!String.IsNullOrEmpty(msg) && vehicle.PageMode.Trim().ToLower().Contains("add"))
                 {
                     ModelState.AddModelError(nameof(vehicle.Vin), msg);
                 }
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 //new vehicle added
                 if (vehicle.VehicleId == 0)
@@ -157,6 +158,24 @@ namespace DealerPeak.Controllers
             var vehicles = context.Vehicles
                                   .Where(v => v.VehiclePrice >= min && v.VehiclePrice <= max);
             return new JsonResult(vehicles);
+        }
+
+        [HttpGet]
+        public IActionResult DeleteVehicle(int id)
+        {
+            var vehicle = context.Vehicles.Find(id);
+            return View(vehicle);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteVehicle(Vehicle vehicle)
+        {
+            if (vehicle.VehicleId > 0)
+            {
+                context.Vehicles.Remove(vehicle);
+                context.SaveChanges();
+            }
+            return RedirectToAction("Index", "Vehicle");
         }
     }
 }

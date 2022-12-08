@@ -55,7 +55,7 @@
             string msg = "";
             if (!string.IsNullOrEmpty(VIN))
             {
-                var vehicle = context.Vehicles.FirstOrDefault(v => v.Vin.ToLower() == VIN.ToLower());
+                var vehicle = context.Vehicles.FirstOrDefault(v => v.Vin.Trim().ToLower() == VIN.ToLower());
                 if (vehicle != null)
                     msg = $"Entered VIN Number {VIN} already in use.";
             }

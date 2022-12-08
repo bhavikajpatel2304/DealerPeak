@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DealerPeak.Models;
 
@@ -31,8 +32,12 @@ public partial class Vehicle
 
     [Required(ErrorMessage = "Please enter a VIN.")]
     [RegularExpression("^([a-zA-Z0-9]{17})$", ErrorMessage = "Please Enter valid VIN.")]
-    [Remote("CheckVIN", "Validation")]
+    [Remote("CheckVIN", "Validation", AdditionalFields = nameof(PageMode))]
     public string? Vin { get; set; }
+
+    //to restrict remote validation on Edit mode
+    [NotMapped]
+    public string PageMode { get; set; } 
 
     public DateTime? DateAdded { get; set; }
 

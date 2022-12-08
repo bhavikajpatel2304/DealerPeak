@@ -7,37 +7,49 @@ namespace DealerPeak.Controllers
     {
         private DealerPeakDbContext context;
         public ValidationController(DealerPeakDbContext dpc) => context = dpc;
-        public JsonResult CheckEmail(string emailAddress)
+        public JsonResult CheckEmail(string emailAddress, string PageMode)
         {
-            string msg = Check.EmailExists(context, emailAddress);
-            if (string.IsNullOrEmpty(msg))
+            if (PageMode.Trim().ToLower().Contains("add"))
             {
-                TempData["okEmail"] = true;
-                return Json(true);
+                string msg = Check.EmailExists(context, emailAddress);
+                if (string.IsNullOrEmpty(msg))
+                {
+                    TempData["okEmail"] = true;
+                    return Json(true);
+                }
+                else return Json(msg);
             }
-            else return Json(msg);
+            else return Json(true);
         }
 
-        public JsonResult CheckContact(string contact)
+        public JsonResult CheckContact(string contact, string PageMode)
         {
-            string msg = Check.ContactExists(context, contact);
-            if (string.IsNullOrEmpty(msg))
+            if (PageMode.Trim().ToLower().Contains("add"))
             {
-                TempData["okContact"] = true;
-                return Json(true);
+                string msg = Check.ContactExists(context, contact);
+                if (string.IsNullOrEmpty(msg))
+                {
+                    TempData["okContact"] = true;
+                    return Json(true);
+                }
+                else return Json(msg);
             }
-            else return Json(msg);
+            else return Json(true);
         }
 
-        public JsonResult CheckVIN(string VIN)
+        public JsonResult CheckVIN(string VIN, string PageMode)
         {
-            string msg = Check.VINExists(context, VIN);
-            if (string.IsNullOrEmpty(msg))
+            if (PageMode.Trim().ToLower().Contains("add"))
             {
-                TempData["okVIN"] = true;
-                return Json(true);
+                string msg = Check.VINExists(context, VIN);
+                if (string.IsNullOrEmpty(msg))
+                {
+                    TempData["okVIN"] = true;
+                    return Json(true);
+                }
+                else return Json(msg);
             }
-            else return Json(msg);
+            else return Json(true);
         }
     }
 }

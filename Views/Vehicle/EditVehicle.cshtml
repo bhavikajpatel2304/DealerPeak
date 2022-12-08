@@ -51,7 +51,14 @@
                 </div>
                 <div class="col-xl">
                     <label asp-for="Vin" class="control-label"></label>
-                    <input asp-for="Vin" class="form-control" />
+                     @{
+                        if (Convert.ToString(ViewData["action"]) == "AddVehicle")
+                        {
+                            <input asp-for="Vin" class="form-control" />
+                        } else {
+                            <input asp-for="Vin" class="form-control" readonly/>
+                        }
+                      }
                     <span asp-validation-for="Vin" class="text-danger"></span>
                 </div>
             </div>
@@ -59,28 +66,29 @@
                 <div class="col-xl">
                     <label asp-for="NewVehicle" class="control-label"></label>
                     <select asp-for="NewVehicle" class="form-control" name="NewVehicle">
-                        <option value="1" selected>New</option>
-                        <option value="0">Used</option>
+                        <option value="true" selected>New</option>
+                        <option value="false">Used</option>
                     </select>
                     <span asp-validation-for="NewVehicle" class="text-danger"></span>
-                </div>
+                </div>  
             </div>
             <div class="form-group row">
                 <div class="col-xl">
                     @{
                         if (Convert.ToString(ViewData["action"]) == "AddVehicle")
                         {
-                            <input type="submit" value="Add" class="btn btn-primary" />
+                                <input type="submit" value="Add" class="btn btn-primary" />
                         }
                         else
                         {
-                            <input type="submit" value="Edit" class="btn btn-primary" />
+                                <input type="submit" value="Edit" class="btn btn-primary" />
                         }
                     }
                 </div>
                 <div class="col-xl">
                     <input type="reset" value="Reset" class="btn btn-secondary" />
                 </div>
+                <input asp-for="PageMode" class="form-control" type="hidden" />
             </div>
         </form>
     </div>
