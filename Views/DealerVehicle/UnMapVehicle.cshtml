@@ -1,0 +1,40 @@
+﻿@model DealerPeak.Models.DealerVehicle
+
+@{
+    ViewData["Title"] = "UnMapVehicle";
+}
+
+<h1>Un Map Vehicle</h1>
+<br />
+<div>
+    <hr />
+    <h3>Are you sure to unmap this vehicle ?</h3>
+    <br />
+    <form asp-action="UnMapVehicle" method="post">
+        @ViewData["DealerVehicleId"]
+        <input type="hidden" asp-for="DealerVehicleId" value="@ViewData["DealerVehicleId"]" />
+        <input type="submit" id="unmap" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-info">Back to Mapping Vehicle List</a>
+    </form>
+</div>
+@section scripts {
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        $(function () {
+            $('#unmap').click(function () {
+                var dealerVehicleId = $('#DealerVehicleId').val();
+                console.log(@ViewData[" DealerVehicleId"]);
+                $.ajax({
+                    type: 'POST',
+                    url: '/unmap/' + dealerVehicleId,
+                    success: function (list) {
+                        window.location.href = '@Url.Action("Index", "DealerVehicle")';
+                    }
+                });
+            });
+        });
+    </script>
+}

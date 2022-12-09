@@ -48,7 +48,7 @@ public partial class DealerPeakDbContext : DbContext
 
         modelBuilder.Entity<DealerVehicle>(entity =>
         {
-            entity.HasKey(e => new { e.DealerVehicleId, e.DealerId, e.VehicleId });
+            entity.HasKey(e => e.DealerVehicleId);
 
             entity.ToTable("Dealer_Vehicle");
 

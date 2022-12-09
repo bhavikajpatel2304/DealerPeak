@@ -15,6 +15,18 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = D:\Bhavika\Humber Academic\Semester 3\2 Web Application Development using ASP.NET MVC ITE 5331\Fall 2022\DealerPeak\DealerPeak
 build_property._RazorSourceGeneratorDebug = 
 
+[D:/Bhavika/Humber Academic/Semester 3/2 Web Application Development using ASP.NET MVC ITE 5331/Fall 2022/DealerPeak/DealerPeak/Views/DealerVehicle/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVhbGVyVmVoaWNsZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Bhavika/Humber Academic/Semester 3/2 Web Application Development using ASP.NET MVC ITE 5331/Fall 2022/DealerPeak/DealerPeak/Views/DealerVehicle/MapVehicle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVhbGVyVmVoaWNsZVxNYXBWZWhpY2xlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/Bhavika/Humber Academic/Semester 3/2 Web Application Development using ASP.NET MVC ITE 5331/Fall 2022/DealerPeak/DealerPeak/Views/DealerVehicle/UnMapVehicle.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVhbGVyVmVoaWNsZVxVbk1hcFZlaGljbGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/Bhavika/Humber Academic/Semester 3/2 Web Application Development using ASP.NET MVC ITE 5331/Fall 2022/DealerPeak/DealerPeak/Views/Dealer/DeleteDealer.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVhbGVyXERlbGV0ZURlYWxlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

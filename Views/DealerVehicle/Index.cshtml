@@ -1,0 +1,61 @@
+﻿@model X.PagedList.IPagedList<DealerPeak.Models.DealerVehicle>
+@using X.PagedList.Mvc;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+
+<link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Dealer Vehicle Mapping List</h1><br/>   
+
+
+<p>
+    <a asp-action="MapVehicle">Map a New Vehicle</a>
+</p>
+<br/>
+@using (Html.BeginForm("Index", "DealerVehicle", FormMethod.Get))
+{
+    <p>
+        Search by any keyword: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </p><br/>
+}
+<table class="table table-light">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">
+                @Html.ActionLink("Vehicle Id", "Index", new { sortOrder = ViewBag.VehicleIdSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th scope="col">
+                @Html.ActionLink("Dealer Id", "Index", new { sortOrder = ViewBag.DealerIdSortParm, currentFilter=ViewBag.CurrentFilter })
+            </th>
+            <th scope="col">
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VehicleId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DealerId)
+                </td>
+                <td>
+                    <a class="btn btn-dark" asp-controller="DealerVehicle" asp-action="UnmapVehicle" asp-route-id="@item.DealerVehicleId">UnMap Vehicle</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
