@@ -1,8 +1,13 @@
 ﻿using DealerPeak.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Protocol.Plugins;
+using System.Security.Claims;
 using X.PagedList;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DealerPeak.Controllers
 {
@@ -181,18 +186,63 @@ namespace DealerPeak.Controllers
         public IActionResult Login() => View();
 
         [HttpPost]
-        public IActionResult Login(User user)
+        public async Task<IActionResult> Login(User user)
         {
             if (!string.IsNullOrEmpty(user.Contact) && !string.IsNullOrEmpty(user.Password))
             {
                 User userInfo = context.Users
                             .FirstOrDefault(u => u.Contact.Equals(user.Contact) && u.Password.Equals(user.Password));
-                return RedirectToAction("Index", "Home", userInfo);
+
+                if (userInfo != null)
+                {
+                    if (userInfo.LoginType.ToLower().Contains("admin"))
+                    {
+                        var claims = new List<Claim>() {
+                        new Claim(ClaimTypes.NameIdentifier, userInfo.Contact.ToString()),
+                        new Claim(ClaimTypes.Name, userInfo.FirstName.ToString()),
+                        new Claim(ClaimTypes.Role, "Admin")
+                    };
+
+                        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        //Initialize a new instance of the ClaimsPrincipal with ClaimsIdentity
+                        var principal = new ClaimsPrincipal(identity);
+
+                        //SignInAsync is a Extension method for Sign in a principal for the specified scheme.
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                            principal, new AuthenticationProperties() { IsPersistent = userInfo.IsActive.Value });
+
+                        //return RedirectToAction("Index", "Admin");
+                        return RedirectToAction("Index", "Home", userInfo);
+                    } else if (userInfo.LoginType.ToLower().Contains("user")) {
+                        var claims = new List<Claim>() {
+                        new Claim(ClaimTypes.NameIdentifier, userInfo.Contact.ToString()),
+                        new Claim(ClaimTypes.Name, userInfo.FirstName.ToString()),
+                        new Claim(ClaimTypes.Role, "User")
+                    };
+
+                        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        //Initialize a new instance of the ClaimsPrincipal with ClaimsIdentity
+                        var principal = new ClaimsPrincipal(identity);
+
+                        //SignInAsync is a Extension method for Sign in a principal for the specified scheme.
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                            principal, new AuthenticationProperties() { IsPersistent = userInfo.IsActive.Value });
+
+                        return RedirectToAction("Index", "Home", userInfo);
+                        //return RedirectToAction("Index", "Admin");
+                    }
+                    else 
+                    return RedirectToAction("Index", "Home", userInfo);
+                }
+                else
+                {
+                    ViewBag.Message = "Invalid Credential";
+                    return View(user);
+                }
             }
-            else
-            {
-                return View(user);
-            }
+            else return View(user);
         }
 
         [HttpGet]
@@ -252,6 +302,7 @@ namespace DealerPeak.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult EditUser(int id)
         {
@@ -261,6 +312,7 @@ namespace DealerPeak.Controllers
             return View("RegisterUser", user);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult DeleteUser(int id)
         {
@@ -269,6 +321,7 @@ namespace DealerPeak.Controllers
             return View(user);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult DeleteUser(User user)
         {
@@ -280,5 +333,16 @@ namespace DealerPeak.Controllers
             return RedirectToAction("Index", "User");
         }
 
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return LocalRedirect("/User/Logout");
+        }
+
+        public IActionResult Denied()
+        {
+            return View();
+        }
     }
 }

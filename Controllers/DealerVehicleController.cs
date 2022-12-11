@@ -1,4 +1,5 @@
 ﻿using DealerPeak.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -112,6 +113,7 @@ namespace DealerPeak.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult MapVehicle()
         {
             TempData["SelectVehicles"] = VehicleList();
@@ -123,6 +125,7 @@ namespace DealerPeak.Controllers
 
         [HttpPost]
         [Route("map/{vehicleId}/{dealerId}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Map(int vehicleId, int dealerId)
         {
             //dealer vehicle mapped
@@ -150,6 +153,7 @@ namespace DealerPeak.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult UnMapVehicle(int id)
         {
             var dv = context.DealerVehicles.Find(id);
@@ -159,6 +163,7 @@ namespace DealerPeak.Controllers
 
         [HttpPost]
         [Route("unmap/{dealervehicleId}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult UnMapVehicle1(int dealervehicleId)
         {
             if (dealervehicleId > 0)

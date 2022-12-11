@@ -1,5 +1,7 @@
 ﻿using DealerPeak.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using X.PagedList;
 
 namespace DealerPeak.Controllers
@@ -68,6 +70,7 @@ namespace DealerPeak.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddDealer()
         {
             ViewData["action"] = "Add";
@@ -75,6 +78,7 @@ namespace DealerPeak.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult EditDealer(int id)
         {
             ViewData["action"] = "Edit";
@@ -84,6 +88,7 @@ namespace DealerPeak.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult EditDealer(Dealer dealer)
         {
             //check weather contact exists on DB or not
@@ -129,6 +134,7 @@ namespace DealerPeak.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteDealer(int id)
         {
             var dealer = context.Dealers.Find(id);
@@ -136,6 +142,7 @@ namespace DealerPeak.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteDealer(Dealer dealer)
         {
             if (dealer.DealerId > 0)

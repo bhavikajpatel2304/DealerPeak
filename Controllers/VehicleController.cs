@@ -1,6 +1,8 @@
 ﻿using DealerPeak.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Data;
 using X.PagedList;
 
 namespace DealerPeak.Controllers
@@ -99,6 +101,7 @@ namespace DealerPeak.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddVehicle()
         {
             ViewData["action"] = "AddVehicle";
@@ -106,6 +109,7 @@ namespace DealerPeak.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult EditVehicle(int id)
         {
             ViewData["action"] = "EditVehicle";
@@ -116,6 +120,7 @@ namespace DealerPeak.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult EditVehicle(Vehicle vehicle)
         {
             //check weather VIN exists on DB or not
@@ -153,6 +158,7 @@ namespace DealerPeak.Controllers
 
         [HttpGet]
         [Route("vehicles/search/{min}/{max}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Search(decimal min, decimal max)
         {
             var vehicles = context.Vehicles
@@ -161,6 +167,7 @@ namespace DealerPeak.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteVehicle(int id)
         {
             var vehicle = context.Vehicles.Find(id);
@@ -168,6 +175,7 @@ namespace DealerPeak.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteVehicle(Vehicle vehicle)
         {
             if (vehicle.VehicleId > 0)
